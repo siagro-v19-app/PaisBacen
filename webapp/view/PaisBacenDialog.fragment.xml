@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core">
+   <Dialog
+		id="PaisBacenDialog"
+		title="Gravar país"
+		class="sapUiSmallMargin">
+   	
+   		<VBox id="vBoxPais" class="sapUiSmallMargin">	
+			<Label text="Código:" labelFor="codigo"/>
+			<Input value="{Codigo}" id="codigo" required="true"/>
+			
+			<Label text="Nome:" labelFor="nome"/>
+			<Input value="{Nome}" id="nome" required="true"/>
+		</VBox>
+   		
+   		<buttons>
+   			<Button text="Salvar" press="onSaveDialog"/>
+   			<Button text="Fechar" press="onCloseDialog"/>
+   		</buttons>
+   </Dialog>
+</core:FragmentDefinition>
