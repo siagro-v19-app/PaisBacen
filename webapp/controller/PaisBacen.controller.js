@@ -18,6 +18,12 @@ sap.ui.define([
 		onIncluir: function(){
 			var oDialog = this._criarDialog();
 			var oModel = this.getOwnerComponent().getModel();
+			var oViewModel = this.getModel("view");
+			
+			oViewModel.setData({
+				titulo: "Inserir País BACEN",
+				msgSave: "País BACEN inserido com sucesso!"
+			});
 			
 			oDialog.unbindElement();
 			oDialog.setEscapeHandler(function(oPromise){
@@ -42,6 +48,12 @@ sap.ui.define([
 			var oDialog = this._criarDialog();
 			var oTable = this.byId("tablePais");
 			var nIndex = oTable.getSelectedIndex();
+			var oViewModel = this.getModel("view");
+			
+			oViewModel.setData({
+				titulo: "Editar País BACEN",
+				msgSave: "País BACEN alterado com sucesso!"
+			});
 			
 			if(nIndex === -1){
 				MessageBox.information("Selecione um país da tabela!");
@@ -104,11 +116,12 @@ sap.ui.define([
 		onSaveDialog: function(){
 			var oView = this.getView();
 			var oModel = this.getOwnerComponent().getModel();
+			var oViewModel = this.getModel("view");
 			
 			oModel.submitChanges({
 				success: function(){
 					oModel.refresh(true);
-					MessageBox.success("Dados gravados.");
+					MessageBox.success(oViewModel.getData().msgSave);
 					oView.byId("PaisBacenDialog").close();
 					oView.byId("tablePais").clearSelection();
 				},
@@ -126,6 +139,10 @@ sap.ui.define([
 			}
 			
 			this.byId("PaisBacenDialog").close();
+		},
+		
+		getModel: function(sModel){
+			return this.getOwnerComponent().getModel(sModel); 
 		}
 	});
 });
