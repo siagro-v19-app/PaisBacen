@@ -4,7 +4,7 @@
    <Dialog
 		id="PaisBacenDialog"
 		title="{view>/titulo}"
-		class="sapUiSmallMargin">
+		class="sapUiSmallMargin sapUiSizeCompact">
    	
    		<VBox id="vBoxPais" class="sapUiSmallMargin">	
 			<Label text="Código:" labelFor="codigo"/>

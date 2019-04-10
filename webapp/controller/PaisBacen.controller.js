@@ -11,8 +11,8 @@ sap.ui.define([
 		
 		onRefresh: function(){
 			var oModel = this.getOwnerComponent().getModel();
-			
 			oModel.refresh(true);
+			this.getView().byId("tablePais").clearSelection();
 		},
 		
 		onIncluir: function(){
@@ -56,7 +56,7 @@ sap.ui.define([
 			});
 			
 			if(nIndex === -1){
-				MessageBox.information("Selecione um país da tabela!");
+				MessageBox.warning("Selecione um país da tabela!");
 				return;
 			}
 			
@@ -72,7 +72,7 @@ sap.ui.define([
 			var nIndex = oTable.getSelectedIndex();
 			
 			if(nIndex === -1){
-				MessageBox.information("Selecione um país da tabela!");
+				MessageBox.warning("Selecione um país da tabela!");
 				return;
 			}
 			
@@ -94,9 +94,6 @@ sap.ui.define([
 				success: function(){
 					oModel.refresh(true);
 					oTable.clearSelection();
-				},
-				error: function(oError){
-					MessageBox.error(oError.responseText);
 				}
 			});
 		},
@@ -118,17 +115,23 @@ sap.ui.define([
 			var oModel = this.getOwnerComponent().getModel();
 			var oViewModel = this.getModel("view");
 			
-			oModel.submitChanges({
-				success: function(){
-					oModel.refresh(true);
-					MessageBox.success(oViewModel.getData().msgSave);
-					oView.byId("PaisBacenDialog").close();
-					oView.byId("tablePais").clearSelection();
-				},
-				error: function(oError){
-					MessageBox.error(oError.responseText);
-				}
-			});
+			if(this._checarCampos(oView) === true){
+				MessageBox.warning("Preencha todos os campos obrigatórios!");
+				return;
+			} else{
+				oModel.submitChanges({
+					success: function(oResponse){
+						var erro = oResponse.__batchResponses[0].response;
+						if(!erro){
+							oModel.refresh(true);
+							MessageBox.success(oViewModel.getData().msgSave);
+							oView.byId("PaisBacenDialog").close();
+							oView.byId("tablePais").clearSelection();	
+						}
+					}
+				});
+			}
+			
 		},
 		
 		onCloseDialog: function(){
@@ -139,6 +142,14 @@ sap.ui.define([
 			}
 			
 			this.byId("PaisBacenDialog").close();
+		},
+		
+		_checarCampos: function(oView){
+			if(oView.byId("codigo").getValue() === "" || oView.byId("nome").getValue() === ""){
+				return true;
+			} else{
+				return false; 
+			}
 		},
 		
 		getModel: function(sModel){
